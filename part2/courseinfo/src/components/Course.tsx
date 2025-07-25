@@ -23,7 +23,10 @@ const Content = ({ parts }) => {
 }
 
 const Total = ({ parts }) => {
-    const total = parts.reduce((sum, part) => sum + part.exercises, 0);
+    const total = parts.reduce((sum, part) => {
+        console.log('what is happening', sum, part)
+        return sum + part.exercises
+    }, 0);
     return (
         <p><strong>Total exercises: {total}</strong></p>
     )
