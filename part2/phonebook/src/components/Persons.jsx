@@ -3,7 +3,7 @@ const Persons = ({ filteredPersons }) => {
         <div>
             {filteredPersons.map(person =>
                 <div key={person.id}>
-                    {person.name} {person.number}
+                    {person.id} - {person.name} {person.number}
                 </div>
             )}
         </div>
