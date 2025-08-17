@@ -42,7 +42,6 @@ const App = () => {
     const newPerson = {
       name: newName,
       number: number,
-      id: persons.length + 1
     }
 
     personService
@@ -58,6 +57,23 @@ const App = () => {
       })
   }
 
+  const handlePersonDelete = (person) => {
+    console.log(`delete the person with id = ${person.id}?`);
+
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService
+        .deletePerson(person.id)
+        .then(response => {
+          setPersons(persons.filter(p => p.id !== person.id))
+          console.log(`person with name ${person.name} deleted.`)
+          console.log(response)
+        })
+        .catch(error => {
+          console.log("error deleting person:", error);
+        })
+    }
+  }
+
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(searchValue.toLowerCase())
   )
@@ -71,7 +87,7 @@ const App = () => {
       <PersonForm number={number} newName={newName} handleContactSave={handleContactSave} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
 
       <h3>Numbers</h3>
-      <Persons filteredPersons={filteredPersons} />
+      <Persons filteredPersons={filteredPersons} handlePersonDelete={handlePersonDelete} />
     </div>
   )
 }
