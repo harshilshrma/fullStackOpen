@@ -58,7 +58,7 @@ const App = () => {
   }
 
   const handlePersonDelete = (person) => {
-    console.log(`delete the person with id = ${person.id}?`);
+    console.log(`delete the person with name = ${person.name}?`);
 
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
@@ -71,6 +71,8 @@ const App = () => {
         .catch(error => {
           console.log("error deleting person:", error);
         })
+    } else {
+      console.log(`okay not deleting ${person.name}`)
     }
   }
 
