@@ -3,12 +3,16 @@ import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import Persons from './components/Persons'
 import personService from './services/personService'
+import './index.css'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [number, setNumber] = useState('')
   const [searchValue, setSearchValue] = useState('')
+  const [message, setMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personService
@@ -46,27 +50,50 @@ const App = () => {
         personService
           .updateNumber(person.id, changedPerson)
           .then(response => {
+            setMessage(`${newName}'s phone number is updated to ${number}!`)
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000)
             setPersons(persons.map(p => p.id !== person.id ? p : response.data));
             setNewName('');
             setNumber('');
             console.log(response);
           })
           .catch(error => {
+            setErrorMessage(`Information of ${person.name} has already been removed from server`)
+            setTimeout(() => {
+              setErrorMessage(null);
+            }, 5000)
+            setPersons(persons.filter(p => p.id !== person.id));
             console.error("error:", error)
           })
       } else {
         console.log(`Number of ${newName} was not changed.`);
+        setNewName('');
+        setNumber('');
       }
     } else {
       personService
         .addPerson(newPerson)
         .then(response => {
+          setMessage(`${newName} has been added with phone number: ${number}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
           setPersons(persons.concat(response.data));
           setNewName('');
           setNumber('');
           console.log(response);
         })
         .catch(error => {
+          if (error.response && error.response.status === 400) {
+            setErrorMessage(error.response.data.error)
+          } else {
+            setErrorMessage(`Failed to add ${newName}`)
+          }
+          setTimeout(() => {
+            setErrorMessage(null);
+          }, 5000)
           console.error("error: ", error);
         })
     }
@@ -79,6 +106,10 @@ const App = () => {
       personService
         .deletePerson(person.id)
         .then(response => {
+          setErrorMessage(`${person.name} has been deleted!`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
           setPersons(persons.filter(p => p.id !== person.id))
           console.log(`person with name ${person.name} deleted.`)
           console.log(response)
@@ -98,6 +129,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} errorMessage={errorMessage}></Notification>
       <Filter searchValue={searchValue} handleSearchValueChange={handleSearchValueChange} />
 
       <h3>Add a new</h3>
