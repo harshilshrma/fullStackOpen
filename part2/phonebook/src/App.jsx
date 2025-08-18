@@ -32,29 +32,44 @@ const App = () => {
 
   const handleContactSave = (event) => {
     event.preventDefault();
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to the phonebook!`)
-      setNewName('');
-      setNumber('');
-      return;
-    }
 
     const newPerson = {
       name: newName,
       number: number,
     }
 
-    personService
-      .addPerson(newPerson)
-      .then(response => {
-        setPersons(persons.concat(response.data));
-        setNewName('');
-        setNumber('');
-        console.log(response);
-      })
-      .catch(error => {
-        console.error("error: ", error);
-      })
+    if (persons.find(person => person.name === newName)) {
+      if (window.confirm(`${newName} is already added to phonebook, replace the old number with new one?`)) {
+        const person = persons.find(person => person.name === newName);
+        const changedPerson = { ...person, number: number };
+
+        personService
+          .updateNumber(person.id, changedPerson)
+          .then(response => {
+            setPersons(persons.map(p => p.id !== person.id ? p : response.data));
+            setNewName('');
+            setNumber('');
+            console.log(response);
+          })
+          .catch(error => {
+            console.error("error:", error)
+          })
+      } else {
+        console.log(`Number of ${newName} was not changed.`);
+      }
+    } else {
+      personService
+        .addPerson(newPerson)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+          setNewName('');
+          setNumber('');
+          console.log(response);
+        })
+        .catch(error => {
+          console.error("error: ", error);
+        })
+    }
   }
 
   const handlePersonDelete = (person) => {
