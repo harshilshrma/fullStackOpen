@@ -23,11 +23,15 @@ const App = () => {
     country.name.common.toLowerCase().includes(countryName.toLowerCase())
   )
 
+  const handleShowCountry = (countryName) => {
+    setCountryName(countryName)
+  }
+
   const renderContent = () => {
     if (!countryName) return null
     if (filteredCountryData.length > 10) return <TooManyMatches />
     if (filteredCountryData.length === 1) return <CountryDetail country={filteredCountryData[0]} />
-    return <Countries countries={filteredCountryData} />
+    return <Countries countries={filteredCountryData} showCountry={handleShowCountry}/>
   }
 
   return (
