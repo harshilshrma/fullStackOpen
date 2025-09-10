@@ -22,7 +22,7 @@ Click on each part name below to explore my code and projects.
 
 - [Part 3 – Programming a Server with NodeJS and Express](./part3)  
   - [Backend Intro](./part3/backend/)
-  - [Phonebook Backend](./part3/phonebook-backend) → [🌐 Live Demo on Render](https://phonebook-backend-8kiy.onrender.com)  
+  - [Phonebook Backend](./part3/phonebook-backend) → [Live Demo on Render](https://phonebook-backend-8kiy.onrender.com)  
 
 ---
 
