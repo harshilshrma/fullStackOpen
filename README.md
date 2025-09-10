@@ -1,7 +1,8 @@
 # Fullstack Open 2025 – My Solutions  
 
-This repository contains my solutions to the FullstackOpen course exercises.  
-Click on each part name below to explore my code and projects.  
+This repository contains my solutions to the FullstackOpen course exercises. Click on each part name below to explore my code and projects.  
+
+Progress: Completed Part 0, 1, 2 ✅ | Working on Part 3 🔄  
 
 ---
 
@@ -22,19 +23,13 @@ Click on each part name below to explore my code and projects.
 
 - [Part 3 – Programming a Server with NodeJS and Express](./part3)  
   - [Backend Intro](./part3/backend/)
-  - [Phonebook Backend](./part3/phonebook-backend) → [Live Demo on Render](https://phonebook-backend-8kiy.onrender.com)  
-
----
-
-## Notes  
-
-- Progress: Completed Part 0, 1, 2 ✅ | Working on Part 3 🔄  
+  - [Phonebook Backend](./part3/phonebook-backend) 
 
 ---
 
 ## About Me  
 
-- Email: **mailto::harshilsharma.dev@gmail.com**  
+- Email: **harshilsharma.dev@gmail.com**  
 - LinkedIn: [linkedin.com/in/harshilshrma](https://www.linkedin.com/in/harshilshrma)  
 - Portfolio: [harshilshrma.com](https://harshilshrma.com/)  
 
