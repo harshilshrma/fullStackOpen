@@ -1,11 +1,11 @@
-# 📚 Fullstack Open 2025 – My Solutions  
+# Fullstack Open 2025 – My Solutions  
 
 This repository contains my solutions to the [Fullstack Open](https://fullstackopen.com/) course exercises.  
 Click on each part name below to explore my code and projects.  
 
 ---
 
-## 🔗 Parts Overview  
+## Parts Overview  
 
 - [Part 0 – Fundamentals of Web Apps](./part0)  
 
@@ -26,13 +26,13 @@ Click on each part name below to explore my code and projects.
 
 ---
 
-## 📝 Notes  
+## Notes  
 
 - Progress: Completed Part 0, 1, 2 ✅ | Working on Part 3 🔄  
 
 ---
 
-## 👨‍💻 About Me  
+## About Me  
 
 - Email: **mailto::harshilsharma.dev@gmail.com**  
 - LinkedIn: [linkedin.com/in/harshilshrma](https://www.linkedin.com/in/harshilshrma)  
