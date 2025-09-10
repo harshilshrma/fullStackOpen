@@ -1,6 +1,6 @@
 # Fullstack Open 2025 – My Solutions  
 
-This repository contains my solutions to the [Fullstack Open](https://fullstackopen.com/) course exercises.  
+This repository contains my solutions to the FullstackOpen course exercises.  
 Click on each part name below to explore my code and projects.  
 
 ---
