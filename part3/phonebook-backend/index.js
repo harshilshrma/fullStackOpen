@@ -28,38 +28,59 @@ app.get('/api/persons', (request, response) => {
         })
 })
 
-app.get('/info', (request, response) => {
-    const date = new Date()
+app.get('/info', async (request, response) => {
+    const date = new Date();
+    const total = await Person.countDocuments({});
     response.send(`
-        <p>Phonebook has info for ${Person.length} people</p>
+        <p>Phonebook has info for ${total} people</p>
         <p>${date}</p>
     `)
 })
 
-app.get('/api/persons/:id', (request, response) => {
-    Person.findById(request.params.id).then(person => {
-        response.json(person)
-    })
+app.get('/api/persons/:id', async (request, response) => {
+    try {
+        const foundPerson = await Person.findById(request.params.id)
+        if (!foundPerson) {
+            return response.status(404).json({ error: 'not found' })
+        }
+
+        response.json(foundPerson);
+    } catch (error) {
+        response.status(400).json({ error: error.message })
+    }
 })
 
-app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    persons = persons.filter(person => person.id !== id)
+app.delete('/api/persons/:id', async (request, response) => {
+    try {
+        const deleted = await Person.findByIdAndDelete(request.params.id);
+        if (!deleted) {
+            return response.status(404).json({ error: 'not found' })
+        }
 
-    response.status(204).end()
+        response.status(204).end()
+    } catch (error) {
+        response.status(400).json({ error: error.message })
+    }
 })
 
 app.post('/api/persons/', (request, response) => {
     const body = request.body
 
-    if (!body.content) {
+    if (!body.name) {
         return response.status(400).json({
-            error: 'content missing'
+            error: 'name missing'
+        })
+    }
+
+    if (!body.number) {
+        return response.status(400).json({
+            error: 'number missing'
         })
     }
 
     const person = new Person({
-        content: body.content
+        name: body.name,
+        number: body.number
     })
 
     person.save().then(person => {
