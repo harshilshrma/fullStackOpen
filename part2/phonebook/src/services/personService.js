@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = '/api/persons';
+const baseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const getAll = () => {
     return axios.get(baseUrl);

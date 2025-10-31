@@ -2,63 +2,44 @@ const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+require('dotenv').config()
+const Person = require('./models/person')
 
+// changing body in morgan log if req is POST
 morgan.token('body', (req) => {
     return req.method === 'POST' ? JSON.stringify(req.body) : '{no body}'
 })
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 app.use(cors())
-app.use(express.static('dist'))
+// app.use(express.static('dist')) // shows frontend
 app.use(express.json())
 
-let persons = [
-    {
-        "id": "1",
-        "name": "Arto Hellas",
-        "number": "040-123456"
-    },
-    {
-        "id": "2",
-        "name": "Ada Lovelace",
-        "number": "39-44-5323523"
-    },
-    {
-        "id": "3",
-        "name": "Dan Abcsramov",
-        "number": "12-43-234345"
-    },
-    {
-        "id": "4",
-        "name": "Mary Poppendieck",
-        "number": "39-23-6423122"
-    }
-]
 
 app.get('/', (request, response) => {
-    response.send('<h1>Backend started!</h1>')
+    response.send('<h1>Henlo! Backend started!</h1>')
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons);
+    Person
+        .find({})
+        .then(person => {
+            response.json(person)
+        })
 })
 
 app.get('/info', (request, response) => {
     const date = new Date()
     response.send(`
-        <p>Phonebook has info for ${persons.length} people</p>
+        <p>Phonebook has info for ${Person.length} people</p>
         <p>${date}</p>
     `)
 })
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id
-    const person = persons.find(person => person.id == id)
-    if (person) {
+    Person.findById(request.params.id).then(person => {
         response.json(person)
-    } else {
-        response.status(404).end()
-    }
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
@@ -69,36 +50,21 @@ app.delete('/api/persons/:id', (request, response) => {
 })
 
 app.post('/api/persons/', (request, response) => {
-    const id = Math.floor(Math.random() * 10000)
     const body = request.body
 
-    if (!body.name) {
+    if (!body.content) {
         return response.status(400).json({
-            error: 'name missing'
+            error: 'content missing'
         })
     }
 
-    if (!body.number) {
-        return response.status(400).json({
-            error: 'number missing'
-        })
-    }
+    const person = new Person({
+        content: body.content
+    })
 
-    if (persons.some(p => p.name.toLowerCase() === body.name.toLowerCase())) {
-        return response.status(400).json({
-            error: 'name must be unique'
-        })
-    }
-
-    const person = {
-        name: body.name,
-        number: body.number,
-        id: String(id)
-    }
-
-    persons = persons.concat(person)
-
-    response.json(person)
+    person.save().then(person => {
+        response.json(person)
+    })
 })
 
 const unknownEndpoint = (request, response) => {
@@ -107,7 +73,7 @@ const unknownEndpoint = (request, response) => {
 
 app.use(unknownEndpoint)
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
 }) 
