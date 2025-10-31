@@ -68,7 +68,7 @@ app.post('/api/persons/', (request, response) => {
 
     if (!body.name) {
         return response.status(400).json({
-            error: 'name missing'
+            error: 'Name Missing'
         })
     }
 
