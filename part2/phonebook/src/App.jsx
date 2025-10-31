@@ -66,6 +66,8 @@ const App = () => {
             }, 5000)
             setPersons(persons.filter(p => p.id !== person.id));
             console.error("error:", error)
+            setNewName('');
+            setNumber('');
           })
       } else {
         console.log(`Number of ${newName} was not changed.`);
