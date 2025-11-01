@@ -89,20 +89,19 @@ app.post('/api/persons/', (request, response) => {
 })
 
 app.put('/api/persons/:id', async (request, response, next) => {
-    const { name, number } = request.body
     try {
-        const updating = await Person.findById(request.params.id)
-        if (!updating) return response.status(404).end()
-        
+        const { name, number } = request.body
+
+        // finding person by id
+        const person = await Person.findById(request.params.id)
+        if (!person) return response.status(404).json({ error: 'person not found'})
+
         person.name = name;
         person.number = number;
 
-        return person.save().then(updatedPerson => {
-            response.json(updatedPerson)
-        })
-        
-
-    } catch(error) {
+        const updatedPerson = await person.save()
+        response.json(updatedPerson)
+    } catch (error) {
         next(error)
     }
 })
