@@ -37,20 +37,20 @@ app.get('/info', async (request, response) => {
     `)
 })
 
-app.get('/api/persons/:id', async (request, response) => {
+app.get('/api/persons/:id', async (request, response, next) => {
     try {
         const foundPerson = await Person.findById(request.params.id)
         if (!foundPerson) {
             return response.status(404).json({ error: 'not found' })
         }
 
-        response.json(foundPerson);
+        return response.json(foundPerson);
     } catch (error) {
-        response.status(400).json({ error: error.message })
+        next(error)
     }
 })
 
-app.delete('/api/persons/:id', async (request, response) => {
+app.delete('/api/persons/:id', async (request, response, next) => {
     try {
         const deleted = await Person.findByIdAndDelete(request.params.id);
         if (!deleted) {
@@ -59,7 +59,7 @@ app.delete('/api/persons/:id', async (request, response) => {
 
         response.status(204).end()
     } catch (error) {
-        response.status(400).json({ error: error.message })
+        next(error)
     }
 })
 
@@ -88,11 +88,43 @@ app.post('/api/persons/', (request, response) => {
     })
 })
 
+app.put('/api/persons/:id', async (request, response, next) => {
+    const { name, number } = request.body
+    try {
+        const updating = await Person.findById(request.params.id)
+        if (!updating) return response.status(404).end()
+        
+        person.name = name;
+        person.number = number;
+
+        return person.save().then(updatedPerson => {
+            response.json(updatedPerson)
+        })
+        
+
+    } catch(error) {
+        next(error)
+    }
+})
+
 const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+
+    next(error)
+}
+
+// this has to be the last loaded middleware, also all the routes should be registered before this!
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
