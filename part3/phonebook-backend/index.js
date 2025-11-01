@@ -54,7 +54,7 @@ app.delete('/api/persons/:id', async (request, response, next) => {
     try {
         const deleted = await Person.findByIdAndDelete(request.params.id);
         if (!deleted) {
-            return response.status(404).json({ error: 'not found' })
+            return response.status(404).json({ error: 'person not found' })
         }
 
         response.status(204).end()
