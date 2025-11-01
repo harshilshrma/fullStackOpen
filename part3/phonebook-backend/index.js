@@ -63,29 +63,32 @@ app.delete('/api/persons/:id', async (request, response, next) => {
     }
 })
 
-app.post('/api/persons/', (request, response) => {
-    const body = request.body
+app.post('/api/persons/', async (request, response, next) => {
+    try {
+        const body = request.body
 
-    if (!body.name) {
-        return response.status(400).json({
-            error: 'Name Missing'
+        if (!body.name) {
+            return response.status(400).json({
+                error: 'Name Missing'
+            })
+        }
+
+        if (!body.number) {
+            return response.status(400).json({
+                error: 'number missing'
+            })
+        }
+
+        const person = new Person({
+            name: body.name,
+            number: body.number
         })
+
+        const savedPerson = await person.save();
+        response.json(savedPerson)
+    } catch (error) {
+        next(error)
     }
-
-    if (!body.number) {
-        return response.status(400).json({
-            error: 'number missing'
-        })
-    }
-
-    const person = new Person({
-        name: body.name,
-        number: body.number
-    })
-
-    person.save().then(person => {
-        response.json(person)
-    })
 })
 
 app.put('/api/persons/:id', async (request, response, next) => {
@@ -94,7 +97,7 @@ app.put('/api/persons/:id', async (request, response, next) => {
 
         // finding person by id
         const person = await Person.findById(request.params.id)
-        if (!person) return response.status(404).json({ error: 'person not found'})
+        if (!person) return response.status(404).json({ error: 'person not found' })
 
         person.name = name;
         person.number = number;
