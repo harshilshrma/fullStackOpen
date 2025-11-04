@@ -29,8 +29,8 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/info', async (request, response) => {
-    const date = new Date();
-    const total = await Person.countDocuments({});
+    const date = new Date()
+    const total = await Person.countDocuments({})
     response.send(`
         <p>Phonebook has info for ${total} people</p>
         <p>${date}</p>
@@ -44,7 +44,7 @@ app.get('/api/persons/:id', async (request, response, next) => {
             return response.status(404).json({ error: 'not found' })
         }
 
-        return response.json(foundPerson);
+        return response.json(foundPerson)
     } catch (error) {
         next(error)
     }
@@ -52,7 +52,7 @@ app.get('/api/persons/:id', async (request, response, next) => {
 
 app.delete('/api/persons/:id', async (request, response, next) => {
     try {
-        const deleted = await Person.findByIdAndDelete(request.params.id);
+        const deleted = await Person.findByIdAndDelete(request.params.id)
         if (!deleted) {
             return response.status(404).json({ error: 'person not found' })
         }
@@ -84,7 +84,7 @@ app.post('/api/persons/', async (request, response, next) => {
             number: body.number
         })
 
-        const savedPerson = await person.save();
+        const savedPerson = await person.save()
         response.json(savedPerson)
     } catch (error) {
         next(error)
@@ -99,8 +99,8 @@ app.put('/api/persons/:id', async (request, response, next) => {
         const person = await Person.findById(request.params.id)
         if (!person) return response.status(404).json({ error: 'person not found' })
 
-        person.name = name;
-        person.number = number;
+        person.name = name
+        person.number = number
 
         const updatedPerson = await person.save()
         response.json(updatedPerson)
@@ -133,4 +133,4 @@ app.use(errorHandler)
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
-}) 
+})
