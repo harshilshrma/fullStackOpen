@@ -2,7 +2,7 @@
 
 This repository contains my solutions to the FullstackOpen course exercises. Click on each part name below to explore my code and projects.  
 
-Progress: Completed Part 0, 1, 2 ✅ | Working on Part 3 🔄  
+Progress: Completed Part 0, 1, 2, 3 ✅ | Working on Part 4 🔄  
 
 ---
 
@@ -24,6 +24,7 @@ Progress: Completed Part 0, 1, 2 ✅ | Working on Part 3 🔄
 - [Part 3 – Programming a Server with NodeJS and Express](./part3)  
   - [Backend Intro](./part3/backend/)
   - [Phonebook Backend](./part3/phonebook-backend) 
+
 
 ---
 
