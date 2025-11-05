@@ -26,7 +26,7 @@ Progress: Completed Part 0, 1, 2, 3 ✅ | Working on Part 4 🔄
   - [Phonebook Backend](./part3/phonebook-backend) 
 
 - [Part 4 - Testing Express servers, user administration](./part4/)
-  
+  - [Blog List App](./part4/bloglist/)
 ---
 
 ## About Me  
