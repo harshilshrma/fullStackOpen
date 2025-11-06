@@ -99,3 +99,35 @@ describe('total likes', () => {
         })
     })
 })
+
+test('author with most blogs', () => {
+    const result = listHelper.mostBlogs(blogs)
+    assert.deepStrictEqual(result, {
+        author: "Robert C. Martin",
+        blogs: 3
+    })
+})
+
+test('author with most blogs (lodash)', () => {
+    const result = listHelper.mostBlogsUsingLodash(blogs)
+    assert.deepStrictEqual(result, {
+        author: "Robert C. Martin",
+        blogs: 3
+    })
+})
+
+test('author with most likes', () => {
+    const result = listHelper.mostLikes(blogs)
+    assert.deepStrictEqual(result, {
+        author: "Edsger W. Dijkstra",
+        likes: 17
+    })
+})
+
+test('author with most likes (lodash)', () => {
+    const result = listHelper.mostLikesUsingLodash(blogs)
+    assert.deepStrictEqual(result, {
+        author: "Edsger W. Dijkstra",
+        likes: 17
+    })
+})
