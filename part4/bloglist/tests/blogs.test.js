@@ -86,8 +86,10 @@ describe('total likes', () => {
         const result = listHelper.totalLikes(blogs)
         assert.strictEqual(result, 36)
     })
+})
 
-    test('of the best blog', () => {
+describe('favorite blog', () => {
+    test('has the most likes = 12', () => {
         const result = listHelper.favoriteBlog(blogs)
         assert.deepStrictEqual(result, {
             _id: "5a422b3a1b54a676234d17f9",
@@ -100,34 +102,39 @@ describe('total likes', () => {
     })
 })
 
-test('author with most blogs', () => {
-    const result = listHelper.mostBlogs(blogs)
-    assert.deepStrictEqual(result, {
-        author: "Robert C. Martin",
-        blogs: 3
+describe('author with most blogs', () => {
+    test('without lodash', () => {
+        const result = listHelper.mostBlogs(blogs)
+        assert.deepStrictEqual(result, {
+            author: "Robert C. Martin",
+            blogs: 3
+        })
+    })
+    
+    test('with lodash', () => {
+        const result = listHelper.mostBlogsUsingLodash(blogs)
+        assert.deepStrictEqual(result, {
+            author: "Robert C. Martin",
+            blogs: 3
+        })
     })
 })
 
-test('author with most blogs (lodash)', () => {
-    const result = listHelper.mostBlogsUsingLodash(blogs)
-    assert.deepStrictEqual(result, {
-        author: "Robert C. Martin",
-        blogs: 3
-    })
-})
 
-test('author with most likes', () => {
-    const result = listHelper.mostLikes(blogs)
-    assert.deepStrictEqual(result, {
-        author: "Edsger W. Dijkstra",
-        likes: 17
+describe('author with most likes', () => {
+    test('without lodash', () => {
+        const result = listHelper.mostLikes(blogs)
+        assert.deepStrictEqual(result, {
+            author: "Edsger W. Dijkstra",
+            likes: 17
+        })
     })
-})
-
-test('author with most likes (lodash)', () => {
-    const result = listHelper.mostLikesUsingLodash(blogs)
-    assert.deepStrictEqual(result, {
-        author: "Edsger W. Dijkstra",
-        likes: 17
+    
+    test('with lodash', () => {
+        const result = listHelper.mostLikesUsingLodash(blogs)
+        assert.deepStrictEqual(result, {
+            author: "Edsger W. Dijkstra",
+            likes: 17
+        })
     })
 })
