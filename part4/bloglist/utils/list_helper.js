@@ -45,7 +45,10 @@ const mostBlogs = (blogs) => {
 // using lodash
 const mostBlogsUsingLodash = (blogs) => {
     const grouped = _.groupBy(blogs, 'author');
-    const authorWithMost = _.maxBy(Object.keys(grouped), author => grouped[author].length)
+    const authorWithMost = _.maxBy(
+        Object.keys(grouped), 
+        author => grouped[author].length
+    )
 
     return {
         author: authorWithMost,
@@ -80,9 +83,12 @@ const mostLikes = (blogs) => {
 // using lodash
 const mostLikesUsingLodash = (blogs) => {
     const grouped = _.groupBy(blogs, 'author')
-    const authorWithMostLikes = _.maxBy(Object.keys(grouped), (author) => {
-        return _.sumBy(grouped[author], 'likes')
-    })
+    const authorWithMostLikes = _.maxBy(
+        Object.keys(grouped), 
+        (author) => {
+            return _.sumBy(grouped[author], 'likes')
+        }
+    )
 
     return {
         author: authorWithMostLikes,
