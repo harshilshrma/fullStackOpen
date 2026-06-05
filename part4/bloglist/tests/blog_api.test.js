@@ -1,6 +1,6 @@
 // part4\bloglist\tests\blog_api.test.js
 
-const assert  = require('node:assert')
+const assert = require('node:assert')
 const { test, after, beforeEach } = require('node:test')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
@@ -39,10 +39,17 @@ test('blogs are returned as JSON', async () => {
         .expect('Content-Type', /application\/json/)
 })
 
-test('all blogs are returned', async() => {
+test('all blogs are returned', async () => {
     const response = await api.get('/api/blogs')
 
     assert.strictEqual(response.body.length, initialBlogs.length)
+})
+
+test('the unique identifier property of the blog posts is named id', async () => {
+    const response = await api.get('/api/blogs')
+    const firstBlog = response.body[0];
+
+    assert.strictEqual(firstBlog.hasOwnProperty("id"), true);
 })
 
 after(async () => {
