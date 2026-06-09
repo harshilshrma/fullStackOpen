@@ -80,6 +80,21 @@ test('verifies that missing likes property default to 0', async() => {
     assert.strictEqual(returnedNewBlog.body.likes, 0);
 })
 
+test('verifies that missing title and url responds with 400 status code', async() => {
+    const missingTitleBlog = {
+        author: "abvdd",
+        url: ".com",
+    }
+
+    const missingUrlBlog = {
+        title: "test blog",
+        author: "abvdd",
+    }
+    
+    await api.post('/api/blogs').send(missingTitleBlog).expect(400)
+    await api.post('/api/blogs').send(missingUrlBlog).expect(400)
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
