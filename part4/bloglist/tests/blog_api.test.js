@@ -95,6 +95,32 @@ test('verifies that missing title and url responds with 400 status code', async(
     await api.post('/api/blogs').send(missingUrlBlog).expect(400)
 })
 
+test('making an HTTP DELETE request to the /api/blogs/:id URL successfully deletes a blog', async() => {
+    const testBlog = {
+        title: "test blog",
+        author: "abvdd",
+        url: ".com",
+        likes: 2
+    }
+
+    const addedTestBlogResponse = await api.post('/api/blogs').send(testBlog)
+    const id = addedTestBlogResponse.body.id;
+
+    // confirm the test blogs increased by 1
+    const res = await api.get('/api/blogs')
+    assert.strictEqual(res.body.length, initialBlogs.length + 1)
+
+    // delete the testBlog
+    await api.delete(`/api/blogs/${id}`).expect(204)
+
+    // confirm the testBlog is deleted
+    const afterDeletionResponse = await api.get('/api/blogs')
+    assert.strictEqual(afterDeletionResponse.body.length, initialBlogs.length)
+
+    const blogsArray = afterDeletionResponse.body.map(blog => blog.id);
+    assert.ok(!blogsArray.includes(id))
+})
+
 after(async () => {
     await mongoose.connection.close()
 })
