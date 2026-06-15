@@ -52,7 +52,7 @@ test('the unique identifier property of the blog posts is named id', async () =>
     assert(firstBlog.hasOwnProperty("id"));
 })
 
-test('making an HTTP POST request to the /api/blogs URL successfully creates a new blog post', async() => {
+test('making an HTTP POST request to the /api/blogs URL successfully creates a new blog post', async () => {
     const testBlog = {
         title: "test blog",
         author: "abvdd",
@@ -69,7 +69,7 @@ test('making an HTTP POST request to the /api/blogs URL successfully creates a n
     assert(blogsTitleArray.includes("test blog"))
 })
 
-test('verifies that missing likes property default to 0', async() => {
+test('verifies that missing likes property default to 0', async () => {
     const testBlog = {
         title: "test blog",
         author: "abvdd",
@@ -80,7 +80,7 @@ test('verifies that missing likes property default to 0', async() => {
     assert.strictEqual(returnedNewBlog.body.likes, 0);
 })
 
-test('verifies that missing title and url responds with 400 status code', async() => {
+test('verifies that missing title and url responds with 400 status code', async () => {
     const missingTitleBlog = {
         author: "abvdd",
         url: ".com",
@@ -90,12 +90,12 @@ test('verifies that missing title and url responds with 400 status code', async(
         title: "test blog",
         author: "abvdd",
     }
-    
+
     await api.post('/api/blogs').send(missingTitleBlog).expect(400)
     await api.post('/api/blogs').send(missingUrlBlog).expect(400)
 })
 
-test('making an HTTP DELETE request to the /api/blogs/:id URL successfully deletes a blog', async() => {
+test('making an HTTP DELETE request to the /api/blogs/:id URL successfully deletes a blog', async () => {
     const testBlog = {
         title: "test blog",
         author: "abvdd",
@@ -119,6 +119,24 @@ test('making an HTTP DELETE request to the /api/blogs/:id URL successfully delet
 
     const blogsArray = afterDeletionResponse.body.map(blog => blog.id);
     assert.ok(!blogsArray.includes(id))
+})
+
+test(`making an HTTP PUT request to the /api/blogs/:id URL successfully updates a blog's likes count`, async () => {
+    const response = await api.get('/api/blogs/')
+    const firstBlogId = response.body[0].id;
+
+    const updatedLikesPayload = { "likes": 999 }
+
+    await api.put(`/api/blogs/${firstBlogId}`)
+        .send(updatedLikesPayload)
+        .expect(200)
+
+    const newResponse = await api.get('/api/blogs/')
+    const updatedBlog = newResponse.body.find(
+        blog => blog.id == firstBlogId
+    )
+
+    assert.strictEqual(updatedBlog.likes, updatedLikesPayload.likes)
 })
 
 after(async () => {
