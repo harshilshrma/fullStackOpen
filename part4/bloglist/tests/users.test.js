@@ -39,6 +39,109 @@ describe('when there is initially one user is db', () => {
         const usernames = usersAtEnd.map(u => u.username)
         assert(usernames.includes(newUser.username))
     })
+
+    test('creation fails with proper status code and message if username already taken', async() => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'root',
+            name: 'Diff user',
+            password: 'abc'
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('expected `username` to be unique'))
+
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation fails with proper status code and message when username is not given', async() => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            name: 'Diff user',
+            password: 'abc'
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('Username & Password both are required!'))
+
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation fails with proper status code and message when password is not given', async() => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'abcd',
+            name: 'Diff user',
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('Username & Password both are required!'))
+        
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation fails with proper status code and message when username is less than 3 characters', async() => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'ro',
+            name: 'Diff user',
+            password: 'asfdg'
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('Username should be of 3 or more characters'))
+        
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation fails with proper status code and message when password is less than 3 characters', async() => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'rocket',
+            name: 'Diff user',
+            password: 'ac'
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        const usersAtEnd = await helper.usersInDb()
+        assert(result.body.error.includes('Password should be of 3 or more characters'))
+        
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
 })
 
 after(async () => {
