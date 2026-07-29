@@ -23,6 +23,7 @@ mongoose
 app.use(express.static('dist'))
 app.use(express.json())
 app.use(middleware.requestLogger)
+app.use(middleware.tokenExtractor)
 
 app.get('/', (request, response, next) => {
     response.send('<h1>Henlo! Backend started!</h1>')
