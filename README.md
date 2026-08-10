@@ -26,9 +26,10 @@ Progress: Completed Part 0, 1, 2, 3, 4 ✅ | Working on Part 5 🔄
   - [Phonebook Backend](./part3/phonebook-backend) 
 
 - [Part 4 - Testing Express servers, user administration](./part4/)
-  - [Blog List App](./part4/bloglist/)
+  - [Blog List App (Backend)](./part4/bloglist/)
 
 - [Part 5 - Testing React apps, React Router](./part5/)
+  - [Blog List App (Frontend)](./part5/bloglist-frontend/)
 ---
 
 ## About Me  
