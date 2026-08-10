@@ -2,7 +2,7 @@
 
 This repository contains my solutions to the FullstackOpen course exercises. Click on each part name below to explore my code and projects.  
 
-Progress: Completed Part 0, 1, 2, 3 ✅ | Working on Part 4 🔄  
+Progress: Completed Part 0, 1, 2, 3, 4 ✅ | Working on Part 5 🔄  
 
 ---
 
@@ -27,6 +27,8 @@ Progress: Completed Part 0, 1, 2, 3 ✅ | Working on Part 4 🔄
 
 - [Part 4 - Testing Express servers, user administration](./part4/)
   - [Blog List App](./part4/bloglist/)
+
+- [Part 5 - Testing React apps, React Router](./part5/)
 ---
 
 ## About Me  
