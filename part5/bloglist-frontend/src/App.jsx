@@ -8,7 +8,8 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
+  const [notification, setNotification] = useState('')
+  const [isError, setIsError] = useState(false)
   const [user, setUser] = useState(null)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -39,11 +40,13 @@ const App = () => {
       )
       setUsername('')
       setPassword('')
-      setErrorMessage('')
+      setNotification('')
     } catch (error) {
-      setErrorMessage(error.response.data.error)
+      setIsError(true)
+      setNotification(error.response.data.error)
       setTimeout(() => {
-        setErrorMessage('')
+        setIsError(false)
+        setNotification('')
       }, 3500)
     }
   }
@@ -54,12 +57,13 @@ const App = () => {
     setUser(null)
     setUsername('')
     setPassword('')
+    setNotification('')
+    setIsError(false)
   }
 
   const loginForm = () => {
     return (
       <form onSubmit={handleLogin}>
-        <h2>Login to the Blogs application!</h2>
         <div>
           <label>
             Username:
@@ -90,15 +94,21 @@ const App = () => {
     try {
       const response = await blogService.addBlog({ title, author, url, likes }, user.token)
       setBlogs(blogs.concat(response))
+      setNotification(`A new blog "${title}" by ${author} has been added!`)
+      setIsError(false)
       setTitle('')
       setAuthor('')
       setUrl('')
       setLikes('')
-      setErrorMessage('')
-    } catch (error) {
-      setErrorMessage(error.response.data.error)
       setTimeout(() => {
-        setErrorMessage('')
+        setNotification('')
+      }, 5000)
+    } catch (error) {
+      setNotification(error.response.data.error)
+      setIsError(true)
+      setTimeout(() => {
+        setNotification('')
+        setIsError(false)
       }, 5000)
     }
   }
@@ -144,27 +154,40 @@ const App = () => {
     )
   }
 
+  const heading = () => {
+    return (
+      <>
+        {!user && <h2>Login to the Blogs application!</h2>}
+        {user && <h2 className='title'>Blogs</h2>}
+      </>
+    )
+  }
+
+  const dashboard = () => {
+    return (
+      <div className='container'>
+        <div className='user-login'>
+          <h3>Hi {user.name}, you are logged in!</h3>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+        {createNewBlogForm()}
+        <div>
+          {blogs.map(blog =>
+            <Blog key={blog.id} blog={blog} />
+          )}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div>
-      {!user && loginForm()}
-      {user && (
-        <div className='container'>
-          <h2 className='title'>Blogs</h2>
-          <div className='user-login'>
-            <h3>Hi {user.name}, you are logged in!</h3>
-            <button onClick={handleLogout}>Logout</button>
-          </div>
-          {createNewBlogForm()}
-          <div>
-            {blogs.map(blog =>
-              <Blog key={blog.id} blog={blog} />
-            )}
-          </div>
-        </div>
-      )}
-      {errorMessage &&
-        <div className='error-dialog'>{errorMessage}</div>
+      {heading()}
+      {notification &&
+        <div className={`notification-dialog ${isError ? "error-dialog" : ""}`}>{notification}</div>
       }
+      {!user && loginForm()}
+      {user && dashboard()}
     </div>
   )
 }

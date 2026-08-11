@@ -25,11 +25,17 @@
     margin: 0;
 }
 
-.error-dialog {
+.notification-dialog {
+    margin-bottom: 0.5rem;
     margin-top: 0.5rem;
     display: inline-flex;
-    border: 2px solid red;
+    border: 2px solid green;
     justify-content: start;
     padding: 0.5rem;
+    background-color: rgb(157, 255, 186);
+}
+
+.error-dialog {
     background-color: rgb(255, 209, 216);
+    border: 2px solid red;
 }
