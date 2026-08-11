@@ -1,0 +1,35 @@
+.user-login {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.title {
+    margin-bottom: 0px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.create-new-blog {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: start;
+}
+
+.create-new-blog h2 {
+    margin: 0;
+}
+
+.error-dialog {
+    margin-top: 0.5rem;
+    display: inline-flex;
+    border: 2px solid red;
+    justify-content: start;
+    padding: 0.5rem;
+    background-color: rgb(255, 209, 216);
+}
