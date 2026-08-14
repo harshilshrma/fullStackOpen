@@ -39,3 +39,27 @@
     background-color: rgb(255, 209, 216);
     border: 2px solid red;
 }
+
+.blog-parent {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem
+}
+
+.blog-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border: 1px solid black;
+    padding: 0.5rem;
+}
+
+.blog-title {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.likes-container {
+    display: flex;
+    gap: 0.25rem
+}
