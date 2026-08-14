@@ -12,7 +12,7 @@ const App = () => {
   const [notification, setNotification] = useState('')
   const [isError, setIsError] = useState(false)
   const [user, setUser] = useState(null)
-  
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs)
@@ -56,6 +56,28 @@ const App = () => {
     setPassword('')
     setNotification('')
     setIsError(false)
+  }
+
+  const handleLike = async (blog) => {
+    const updatedBlog = {
+      ...blog,
+      user: user.id,
+      likes: blog.likes + 1
+    }
+
+    try {
+      const response = await blogService.addLike(updatedBlog)
+      setBlogs(
+        blogs.map(blog => blog.id === response.id ? response : blog)
+      )
+    } catch (error) {
+      setIsError(true)
+      setNotification(error.response.data.error)
+      setTimeout(() => {
+        setIsError(false)
+        setNotification('')
+      }, 5000)
+    }
   }
 
   const loginForm = () => {
@@ -123,10 +145,10 @@ const App = () => {
           <h3>Hi {user.name}, you are logged in!</h3>
           <button onClick={handleLogout}>Logout</button>
         </div>
-        <CreateNewBlogForm addBlog={addNewBlog}/>
+        <CreateNewBlogForm addBlog={addNewBlog} />
         <div className='blog-parent'>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} handleLike={handleLike} />
           )}
         </div>
       </div>

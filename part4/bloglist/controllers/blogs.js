@@ -34,7 +34,7 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
     }
 
     if (blogToDelete.user.toString() !== user.id.toString()) {
-        return response.status(403).json({ error: 'Invalid deletion - only the creator can delete a blog.'})
+        return response.status(403).json({ error: 'Invalid deletion - only the creator can delete a blog.' })
     }
 
     await Blog.findByIdAndDelete(id);
@@ -43,12 +43,16 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
 })
 
 blogsRouter.put('/:id', async (request, response) => {
-    const { likes } = request.body
+    const newBlog = request.body
 
     const fetchedBlog = await Blog.findById(request.params.id)
     if (!fetchedBlog) return response.status(404).end()
 
-    fetchedBlog.likes = likes
+    fetchedBlog.user = newBlog.user
+    fetchedBlog.likes = newBlog.likes
+    fetchedBlog.author = newBlog.author
+    fetchedBlog.title = newBlog.title
+    fetchedBlog.url = newBlog.url
 
     const updateResponse = await fetchedBlog.save()
     response.status(200).json(updateResponse)
