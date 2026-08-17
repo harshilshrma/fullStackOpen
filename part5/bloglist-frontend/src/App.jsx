@@ -160,7 +160,7 @@ const App = () => {
         <CreateNewBlogForm addBlog={addNewBlog} />
         <div className='blog-parent'>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleLike={handleLike} user={user} handleRemoveBlog={handleRemoveBlog}/>
+            <Blog key={blog.id} blog={blog} handleLike={handleLike} user={user} handleRemoveBlog={handleRemoveBlog} />
           )}
         </div>
       </div>
@@ -171,7 +171,7 @@ const App = () => {
     <div>
       {heading()}
       {notification &&
-        <div className={`notification-dialog ${isError ? "error-dialog" : ""}`}>{notification}</div>
+        <div className={`notification-dialog ${isError ? 'error-dialog' : ''}`}>{notification}</div>
       }
       {!user && loginForm()}
       {user && dashboard()}

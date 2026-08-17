@@ -3,7 +3,7 @@ import '../App.css'
 
 const Blog = ({ blog, handleLike, handleRemoveBlog, user }) => {
   const [allDetailsVisible, setAllDetailsVisible] = useState(false)
-  const showRemoveButton = blog.user.id == user.id
+  const showRemoveButton = blog.user.id === user.id
 
   const handleRemoveBlogClick = () => {
     if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
@@ -15,7 +15,7 @@ const Blog = ({ blog, handleLike, handleRemoveBlog, user }) => {
     <div className='blog-container'>
       <div className='blog-title'>
         {blog.title}
-        <button onClick={() => setAllDetailsVisible(!allDetailsVisible)}>{allDetailsVisible ? "Hide" : "View"}</button>
+        <button onClick={() => setAllDetailsVisible(!allDetailsVisible)}>{allDetailsVisible ? 'Hide' : 'View'}</button>
       </div>
       {allDetailsVisible &&
         <div>
