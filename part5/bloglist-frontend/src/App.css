@@ -63,3 +63,17 @@
     display: flex;
     gap: 0.25rem
 }
+
+.blog-remove-button {
+    border: none;
+    border-radius: 10px;
+    padding: 0.25rem 0.5rem;
+    color: red;
+    background-color: rgb(255, 209, 216);
+    cursor: pointer;
+}
+
+.blog-content {
+    display: flex;
+    flex-direction: column;
+}

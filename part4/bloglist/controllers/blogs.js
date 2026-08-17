@@ -17,10 +17,11 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
     const createdBlog = new Blog(blogWithUser)
 
     const savedBlog = await createdBlog.save()
-
+    
     user.blogs = [...user.blogs, savedBlog._id]
     await user.save()
-
+    
+    await savedBlog.populate('user', { username: 1, name: 1})
     response.status(201).json(savedBlog)
 })
 
@@ -33,7 +34,13 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
         return response.status(404).json({ message: 'Blog not found!' })
     }
 
-    if (blogToDelete.user.toString() !== user.id.toString()) {
+    if (!blogToDelete.user) {
+        return response.status(403).json({
+            error: 'Invalid deletion - this blog has no associated user.'
+        })
+    }
+
+    if (blogToDelete.user.toString() !== user._id.toString()) {
         return response.status(403).json({ error: 'Invalid deletion - only the creator can delete a blog.' })
     }
 
@@ -55,6 +62,7 @@ blogsRouter.put('/:id', async (request, response) => {
     fetchedBlog.url = newBlog.url
 
     const updateResponse = await fetchedBlog.save()
+    await updateResponse.populate('user', { username: 1, name: 1 })
     response.status(200).json(updateResponse)
 })
 

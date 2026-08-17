@@ -13,6 +13,13 @@ const App = () => {
   const [isError, setIsError] = useState(false)
   const [user, setUser] = useState(null)
 
+  const clearNotification = () => {
+    setTimeout(() => {
+      setIsError(false)
+      setNotification('')
+    }, 5000)
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs(blogs.sort((a, b) => b.likes - a.likes))
@@ -41,10 +48,7 @@ const App = () => {
     } catch (error) {
       setIsError(true)
       setNotification(error.response.data.error)
-      setTimeout(() => {
-        setIsError(false)
-        setNotification('')
-      }, 3500)
+      clearNotification()
     }
   }
 
@@ -61,7 +65,7 @@ const App = () => {
   const handleLike = async (blog) => {
     const updatedBlog = {
       ...blog,
-      user: user.id,
+      user: blog.user.id,
       likes: blog.likes + 1
     }
 
@@ -73,10 +77,23 @@ const App = () => {
     } catch (error) {
       setIsError(true)
       setNotification(error.response.data.error)
-      setTimeout(() => {
-        setIsError(false)
-        setNotification('')
-      }, 5000)
+      clearNotification()
+    }
+  }
+
+  const handleRemoveBlog = async (blog) => {
+    try {
+      await blogService.removeBlog(blog.id, user.token)
+      setBlogs(
+        blogs.filter(b => b.id !== blog.id)
+      )
+      setIsError(false)
+      setNotification(`Blog "${blog.title}" by ${blog.author} was removed!`)
+      clearNotification()
+    } catch (error) {
+      setIsError(true)
+      setNotification(error.response.data.error)
+      clearNotification()
     }
   }
 
@@ -114,17 +131,12 @@ const App = () => {
       setBlogs(blogs.concat(response))
       setNotification(`A new blog "${title}" by ${author} has been added!`)
       setIsError(false)
-      setTimeout(() => {
-        setNotification('')
-      }, 5000)
+      clearNotification()
       return true
     } catch (error) {
       setNotification(error.response.data.error)
       setIsError(true)
-      setTimeout(() => {
-        setNotification('')
-        setIsError(false)
-      }, 5000)
+      clearNotification()
       return false
     }
   }
@@ -142,13 +154,13 @@ const App = () => {
     return (
       <div className='container'>
         <div className='user-login'>
-          <h3>Hi {user.name}, you are logged in!</h3>
+          <h3>Hi {user.name} ({user.username}), you are logged in!</h3>
           <button onClick={handleLogout}>Logout</button>
         </div>
         <CreateNewBlogForm addBlog={addNewBlog} />
         <div className='blog-parent'>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleLike={handleLike} />
+            <Blog key={blog.id} blog={blog} handleLike={handleLike} user={user} handleRemoveBlog={handleRemoveBlog}/>
           )}
         </div>
       </div>
