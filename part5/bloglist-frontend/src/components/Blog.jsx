@@ -11,6 +11,12 @@ const Blog = ({ blog, handleLike, handleRemoveBlog, user }) => {
     }
   }
 
+  const formatUrl = (url) => {
+    if (!url) return '#';
+    return url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`;
+  };
+
+
   return (
     <div className='blog-container'>
       <div className='blog-title'>
@@ -20,7 +26,7 @@ const Blog = ({ blog, handleLike, handleRemoveBlog, user }) => {
       {allDetailsVisible &&
         <div>
           <div className='blog-content'>
-            {blog.url}
+            <a href={formatUrl(blog.url)} target='_blank'>{blog.url}</a>
             <div className='likes-container'>
               Likes: {blog.likes}
               <button onClick={() => handleLike(blog)}>like</button>
