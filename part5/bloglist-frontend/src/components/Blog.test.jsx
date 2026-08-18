@@ -38,6 +38,7 @@ test('Clicking the like button twice calls the event handler of the component tw
   const user = userEvent.setup()
   const viewButton = screen.getByRole('button', { name: 'View' })
   await user.click(viewButton)
+
   const likeButton = screen.getByRole('button', { name: 'like' })
   await user.click(likeButton)
   await user.click(likeButton)
