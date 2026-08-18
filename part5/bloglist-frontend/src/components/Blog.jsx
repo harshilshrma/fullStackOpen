@@ -12,9 +12,9 @@ const Blog = ({ blog, handleLike, handleRemoveBlog, user }) => {
   }
 
   const formatUrl = (url) => {
-    if (!url) return '#';
-    return url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`;
-  };
+    if (!url) return '#'
+    return url.startsWith('http://') || url.startsWith('https://') ? url : `https://${url}`
+  }
 
   return (
     <div className='blog-container'>
