@@ -30,6 +30,7 @@ Progress: Completed Part 0, 1, 2, 3, 4 ✅ | Working on Part 5 🔄
 
 - [Part 5 - Testing React apps, React Router](./part5/)
   - [Blog List App (Frontend)](./part5/bloglist-frontend/)
+  - [Blog List E2E Playwright Tests](./part5/bloglist-e2e/)
 ---
 
 ## About Me  
