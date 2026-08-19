@@ -40,4 +40,34 @@ describe('Blog App', () => {
             await expect(page.getByText('invalid username or password')).toBeVisible()
         })
     })
+
+    describe('When logged in', () => {
+        beforeEach(async ({ page }) => {
+            await page.getByLabel('Username').fill('max')
+            await page.getByLabel('Password').fill('hs33')
+            await page.getByRole('button', { name: 'Login' }).click()
+        })
+
+        test('a new blog can be created', async ({ page }) => {
+            // open create form
+            await page.getByRole('button', { name: 'Create a new blog!' }).click()
+            
+            // fill input fields
+            await page.getByLabel('Title*:').fill('test blog title')
+            await page.getByLabel('Author:').fill('test user')
+            await page.getByLabel('URL*:').fill('www.test.com')
+            await page.getByLabel('Likes:').fill('43')
+
+            // submit the form
+            await page.getByRole('button', { name: 'Create' }).click()
+            
+            // expect correct fields
+            await expect(page.getByText('test blog title – test user')).toBeVisible()
+            await expect(page.getByRole('button', { name: 'View' })).toBeVisible()
+            await page.getByRole('button', { name: 'View' }).click()
+            await expect(page.getByText('www.test.com')).toBeVisible()
+            await expect(page.getByText('Likes: 43')).toBeVisible()
+            await expect(page.getByRole('button', { name: 'like' })).toBeVisible()
+        })
+    })
 })
