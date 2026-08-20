@@ -1,8 +1,6 @@
-import { useState } from 'react'
 import '../App.css'
 
-const Blog = ({ blog, handleLike, handleRemoveBlog, user }) => {
-  const [allDetailsVisible, setAllDetailsVisible] = useState(false)
+const Blog = ({ blog, handleLike, handleRemoveBlog, user, isVisible, toggleVisibility }) => {
   const showRemoveButton = blog.user && user && blog.user.id === user.id
 
   const handleRemoveBlogClick = () => {
@@ -20,9 +18,9 @@ const Blog = ({ blog, handleLike, handleRemoveBlog, user }) => {
     <div className='blog-container'>
       <div className='blog-title'>
         {blog.title} – {blog.author}
-        <button onClick={() => setAllDetailsVisible(!allDetailsVisible)}>{allDetailsVisible ? 'Hide' : 'View'}</button>
+        <button onClick={() => toggleVisibility(blog.id)}>{isVisible ? 'Hide' : 'View'}</button>
       </div>
-      {allDetailsVisible &&
+      {isVisible &&
         <div>
           <div className='blog-content'>
             <a href={formatUrl(blog.url)} target='_blank'>{blog.url}</a>

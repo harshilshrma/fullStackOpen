@@ -12,6 +12,7 @@ const App = () => {
   const [notification, setNotification] = useState('')
   const [isError, setIsError] = useState(false)
   const [user, setUser] = useState(null)
+  const [visibilityList, setVisibilityList] = useState([])
 
   const clearNotification = () => {
     setTimeout(() => {
@@ -21,9 +22,16 @@ const App = () => {
   }
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
+    blogService.getAll().then(blogs => {
       setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-    )
+
+      const visiList = blogs.map(blog => ({
+        id: blog.id,
+        visibility: false
+      }))
+
+      setVisibilityList(visiList)
+    })
   }, [])
 
   useEffect(() => {
@@ -71,7 +79,7 @@ const App = () => {
 
     try {
       const response = await blogService.addLike(updatedBlog)
-      
+
       const newBlogsArray = blogs.map(blog => blog.id === response.id ? response : blog)
       newBlogsArray.sort((a, b) => b.likes - a.likes)
       setBlogs(newBlogsArray)
@@ -155,18 +163,53 @@ const App = () => {
     )
   }
 
+  const toggleVisibility = (id) => {
+    setVisibilityList(prevList =>
+      prevList.map(obj =>
+        obj.id === id ? { ...obj, visibility: !obj.visibility } : obj
+      )
+    )
+  }
+
+  const handleViewAllBlogs = () => {
+    setVisibilityList(prevList => 
+      prevList.map(obj => ({...obj, visibility: true}))
+    )
+  }
+
+  const handleHideAllBlogs = () => {
+    setVisibilityList(prevList => 
+      prevList.map(obj => ({...obj, visibility: false}))
+    )
+  }
+
   const dashboard = () => {
+    const allBlogsVisible = visibilityList.length > 0 && visibilityList.every(obj => obj.visibility)
     return (
       <div className='container'>
         <div className='user-login'>
           <h3>Hi {user.name} ({user.username}), you are logged in!</h3>
           <button onClick={handleLogout}>Logout</button>
         </div>
-        <CreateNewBlogForm addBlog={addNewBlog} />
+        <div className='top-buttons'>
+          <CreateNewBlogForm addBlog={addNewBlog} />
+          <button onClick={allBlogsVisible ? handleHideAllBlogs : handleViewAllBlogs}>{allBlogsVisible ? 'Hide All' : 'View All'}</button>
+        </div>
         <div className='blog-parent'>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleLike={handleLike} user={user} handleRemoveBlog={handleRemoveBlog} />
-          )}
+          {blogs.map(blog => {
+            const isBlogVisible = visibilityList.find(visi => visi.id === blog.id)?.visibility ?? false
+            return (
+              <Blog
+                key={blog.id}
+                blog={blog}
+                handleLike={handleLike}
+                user={user}
+                handleRemoveBlog={handleRemoveBlog}
+                isVisible={isBlogVisible}
+                toggleVisibility={toggleVisibility}
+              />
+            )
+          })}
         </div>
       </div>
     )
