@@ -14,8 +14,8 @@ logger.info('Trying to connect to MongoDB...')
 mongoose
     .connect(config.MONGODB_URI)
     .then(() => {
-        logger.info('Connected to MongoDB!\n------')
         logger.info(`Mode: ${process.env.NODE_ENV}`)
+        logger.info('Connected to MongoDB!\n------')
     })
     .catch((error) => {
         logger.error('Error connecting to MongoDB:', error);

@@ -71,9 +71,10 @@ const App = () => {
 
     try {
       const response = await blogService.addLike(updatedBlog)
-      setBlogs(
-        blogs.map(blog => blog.id === response.id ? response : blog)
-      )
+      
+      const newBlogsArray = blogs.map(blog => blog.id === response.id ? response : blog)
+      newBlogsArray.sort((a, b) => b.likes - a.likes)
+      setBlogs(newBlogsArray)
     } catch (error) {
       setIsError(true)
       setNotification(error.response.data.error)
@@ -128,7 +129,11 @@ const App = () => {
   const addNewBlog = async (title, author, url, likes) => {
     try {
       const response = await blogService.addBlog({ title, author, url, likes }, user.token)
-      setBlogs(blogs.concat(response))
+
+      const newBlogsArray = blogs.concat(response)
+      newBlogsArray.sort((a, b) => b.likes - a.likes)
+      setBlogs(newBlogsArray)
+
       setNotification(`A new blog "${title}" by ${author} has been added!`)
       setIsError(false)
       clearNotification()
