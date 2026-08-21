@@ -3,16 +3,19 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import './App.css'
-import CreateNewBlogForm from './components/CreateNewBlogForm'
+import Home from './components/Home'
+import Login from './components/Login'
+import {
+  Routes, Route, Link,
+  useNavigate
+} from 'react-router-dom'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [notification, setNotification] = useState('')
   const [isError, setIsError] = useState(false)
   const [user, setUser] = useState(null)
-  const [visibilityList, setVisibilityList] = useState([])
+  const navigate = useNavigate()
 
   const clearNotification = () => {
     setTimeout(() => {
@@ -24,13 +27,6 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs => {
       setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-
-      const visiList = blogs.map(blog => ({
-        id: blog.id,
-        visibility: false
-      }))
-
-      setVisibilityList(visiList)
     })
   }, [])
 
@@ -42,21 +38,21 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async (event) => {
-    event.preventDefault()
+  const handleLogin = async (username, password) => {
     try {
       const user = await loginService.login({ username, password })
       setUser(user)
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
-      setUsername('')
-      setPassword('')
       setNotification('')
+      navigate('/')
+      return true
     } catch (error) {
       setIsError(true)
       setNotification(error.response.data.error)
       clearNotification()
+      return false
     }
   }
 
@@ -64,10 +60,9 @@ const App = () => {
     event.preventDefault()
     window.localStorage.removeItem('loggedUser')
     setUser(null)
-    setUsername('')
-    setPassword('')
     setNotification('')
     setIsError(false)
+    navigate('/')
   }
 
   const handleLike = async (blog) => {
@@ -79,7 +74,6 @@ const App = () => {
 
     try {
       const response = await blogService.addLike(updatedBlog)
-
       const newBlogsArray = blogs.map(blog => blog.id === response.id ? response : blog)
       newBlogsArray.sort((a, b) => b.likes - a.likes)
       setBlogs(newBlogsArray)
@@ -106,34 +100,6 @@ const App = () => {
     }
   }
 
-  const loginForm = () => {
-    return (
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>
-            Username:
-            <input
-              type="text"
-              value={username}
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Password:
-            <input
-              type="password"
-              value={password}
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </label>
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    )
-  }
-
   const addNewBlog = async (title, author, url, likes) => {
     try {
       const response = await blogService.addBlog({ title, author, url, likes }, user.token)
@@ -154,75 +120,33 @@ const App = () => {
     }
   }
 
-  const heading = () => {
-    return (
-      <>
-        {!user && <h2>Login to the Blogs application!</h2>}
-        {user && <h2 className='title'>Blogs</h2>}
-      </>
-    )
-  }
-
-  const toggleVisibility = (id) => {
-    setVisibilityList(prevList =>
-      prevList.map(obj =>
-        obj.id === id ? { ...obj, visibility: !obj.visibility } : obj
-      )
-    )
-  }
-
-  const handleViewAllBlogs = () => {
-    setVisibilityList(prevList => 
-      prevList.map(obj => ({...obj, visibility: true}))
-    )
-  }
-
-  const handleHideAllBlogs = () => {
-    setVisibilityList(prevList => 
-      prevList.map(obj => ({...obj, visibility: false}))
-    )
-  }
-
-  const dashboard = () => {
-    const allBlogsVisible = visibilityList.length > 0 && visibilityList.every(obj => obj.visibility)
-    return (
-      <div className='container'>
-        <div className='user-login'>
-          <h3>Hi {user.name} ({user.username}), you are logged in!</h3>
-          <button onClick={handleLogout}>Logout</button>
-        </div>
-        <div className='top-buttons'>
-          <CreateNewBlogForm addBlog={addNewBlog} />
-          <button onClick={allBlogsVisible ? handleHideAllBlogs : handleViewAllBlogs}>{allBlogsVisible ? 'Hide All' : 'View All'}</button>
-        </div>
-        <div className='blog-parent'>
-          {blogs.map(blog => {
-            const isBlogVisible = visibilityList.find(visi => visi.id === blog.id)?.visibility ?? false
-            return (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                handleLike={handleLike}
-                user={user}
-                handleRemoveBlog={handleRemoveBlog}
-                isVisible={isBlogVisible}
-                toggleVisibility={toggleVisibility}
-              />
-            )
-          })}
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div>
-      {heading()}
-      {notification &&
-        <div className={`notification-dialog ${isError ? 'error-dialog' : ''}`}>{notification}</div>
-      }
-      {!user && loginForm()}
-      {user && dashboard()}
+      <div>
+        <div className='navbar'>
+          <Link to="/">Blogs</Link>
+          {user ? <button onClick={handleLogout}>Logout</button> : <Link to="/login">Login</Link>}
+        </div>
+
+        {notification &&
+          <div className={`notification-dialog ${isError ? 'error-dialog' : ''}`}>{notification}</div>
+        }
+
+        <Routes>
+          <Route path="/" element={
+            <Home
+              user={user}
+              blogs={blogs}
+              addNewBlog={addNewBlog}
+              handleLike={handleLike}
+              handleRemoveBlog={handleRemoveBlog}
+            />
+          } />
+          <Route path="/login" element={
+            <Login user={user} handleLogin={handleLogin} />
+          } />
+        </Routes>
+      </div>
     </div>
   )
 }
