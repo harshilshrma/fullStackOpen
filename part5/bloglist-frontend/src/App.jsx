@@ -5,6 +5,7 @@ import loginService from './services/login'
 import './App.css'
 import Home from './components/Home'
 import Login from './components/Login'
+import SingleBlog from './components/SingleBlog'
 import {
   Routes, Route, Link,
   useNavigate
@@ -120,6 +121,10 @@ const App = () => {
     }
   }
 
+  const handleBlogVisit = (id) => {
+    navigate(`/blogs/${id}`)
+  }
+
   return (
     <div>
       <div>
@@ -140,10 +145,14 @@ const App = () => {
               addNewBlog={addNewBlog}
               handleLike={handleLike}
               handleRemoveBlog={handleRemoveBlog}
+              handleBlogVisit={handleBlogVisit}
             />
           } />
           <Route path="/login" element={
             <Login user={user} handleLogin={handleLogin} />
+          } />
+          <Route path="/blogs/:id" element={
+            <SingleBlog blogs={blogs} user={user} handleLike={handleLike} handleRemoveBlog={handleRemoveBlog}/>
           } />
         </Routes>
       </div>

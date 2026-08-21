@@ -61,7 +61,8 @@
 
 .likes-container {
     display: flex;
-    gap: 0.25rem
+    gap: 0.25rem;
+    align-items: center;
 }
 
 .blog-remove-button {

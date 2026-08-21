@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import CreateNewBlogForm from './CreateNewBlogForm'
 import Blog from './Blog'
 
-const Home = ({ user, blogs, addNewBlog, handleLike, handleRemoveBlog }) => {
+const Home = ({ user, blogs, addNewBlog, handleLike, handleRemoveBlog, handleBlogVisit }) => {
     const [visibilityList, setVisibilityList] = useState([])
     const allBlogsVisible = visibilityList.length > 0 && visibilityList.every(obj => obj.visibility)
 
@@ -35,6 +35,12 @@ const Home = ({ user, blogs, addNewBlog, handleLike, handleRemoveBlog }) => {
         )
     }
 
+    const handleRemoveBlogClick = (blog) => {
+        if (window.confirm(`Remove blog "${blog.title}" by ${blog.author}?`)) {
+            handleRemoveBlog(blog)
+        }
+    }
+
     return (
         <div>
             <h2 className='title'>Blogs</h2>
@@ -55,9 +61,10 @@ const Home = ({ user, blogs, addNewBlog, handleLike, handleRemoveBlog }) => {
                                 blog={blog}
                                 handleLike={handleLike}
                                 user={user}
-                                handleRemoveBlog={handleRemoveBlog}
+                                handleRemoveBlogClick={handleRemoveBlogClick}
                                 isVisible={isBlogVisible}
                                 toggleVisibility={toggleVisibility}
+                                handleBlogVisit={handleBlogVisit}
                             />
                         )
                     })}

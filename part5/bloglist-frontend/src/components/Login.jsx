@@ -50,6 +50,12 @@ const Login = ({ user, handleLogin }) => {
                     {loginForm()}
                 </>
             }
+            {user &&
+                <>
+                    <h3>Hey {user.name}, you are already logged in! </h3>
+                    <p>Go to <a href='/'>Blogs</a> to access blogs.</p>
+                </>
+            }
         </div>
     )
 }
