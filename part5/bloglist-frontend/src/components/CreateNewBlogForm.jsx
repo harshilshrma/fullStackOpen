@@ -1,21 +1,18 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const CreateNewBlogForm = ({ addBlog }) => {
+const CreateNewBlogForm = ({ user, addBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const [likes, setLikes] = useState('')
-  const [createFormVisible, setCreateFormVisible] = useState(false)
-
-  const showWhenVisible = { display: createFormVisible ? '' : 'none' }
-  const hideWhenVisible = { display: createFormVisible ? 'none' : '' }
+  const navigate = useNavigate()
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     const success = await addBlog(title, author, url, likes)
 
     if (success) {
-      setCreateFormVisible(false)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -23,12 +20,14 @@ const CreateNewBlogForm = ({ addBlog }) => {
     }
   }
 
+  if (!user) {
+    return (
+      <p><a href='/login'>Log in</a> to add a new blog!</p>
+    )
+  }
+
   return (
     <div>
-      <div style={hideWhenVisible}>
-        <button onClick={() => setCreateFormVisible(true)}>Create a new blog!</button>
-      </div>
-      <div style={showWhenVisible}>
         <form onSubmit={handleSubmit} className='create-new-blog'>
           <h2>Create New Blog</h2>
           <label>
@@ -65,8 +64,7 @@ const CreateNewBlogForm = ({ addBlog }) => {
           </label>
           <button type="submit">Create</button>
         </form>
-        <button onClick={() => setCreateFormVisible(false)}>Cancel</button>
-      </div>
+        <button onClick={() => navigate('/')}>Cancel</button>
     </div>
   )
 }

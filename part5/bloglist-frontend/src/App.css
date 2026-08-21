@@ -19,6 +19,7 @@
     flex-direction: column;
     gap: 0.5rem;
     align-items: start;
+    margin-top: 1.25rem;
 }
 
 .create-new-blog h2 {

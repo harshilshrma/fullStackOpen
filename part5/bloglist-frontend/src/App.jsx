@@ -10,6 +10,7 @@ import {
   Routes, Route, Link,
   useNavigate
 } from 'react-router-dom'
+import CreateNewBlogForm from './components/CreateNewBlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -92,6 +93,7 @@ const App = () => {
         blogs.filter(b => b.id !== blog.id)
       )
       setIsError(false)
+      navigate('/')
       setNotification(`Blog "${blog.title}" by ${blog.author} was removed!`)
       clearNotification()
     } catch (error) {
@@ -110,6 +112,7 @@ const App = () => {
       setBlogs(newBlogsArray)
 
       setNotification(`A new blog "${title}" by ${author} has been added!`)
+      navigate('/')
       setIsError(false)
       clearNotification()
       return true
@@ -130,6 +133,7 @@ const App = () => {
       <div>
         <div className='navbar'>
           <Link to="/">Blogs</Link>
+          {user && <Link to="/create">Add a new blog</Link>}
           {user ? <button onClick={handleLogout}>Logout</button> : <Link to="/login">Login</Link>}
         </div>
 
@@ -142,7 +146,6 @@ const App = () => {
             <Home
               user={user}
               blogs={blogs}
-              addNewBlog={addNewBlog}
               handleLike={handleLike}
               handleRemoveBlog={handleRemoveBlog}
               handleBlogVisit={handleBlogVisit}
@@ -153,6 +156,9 @@ const App = () => {
           } />
           <Route path="/blogs/:id" element={
             <SingleBlog blogs={blogs} user={user} handleLike={handleLike} handleRemoveBlog={handleRemoveBlog}/>
+          } />
+          <Route path="/create" element={
+            <CreateNewBlogForm user={user} addBlog={addNewBlog}/>
           } />
         </Routes>
       </div>

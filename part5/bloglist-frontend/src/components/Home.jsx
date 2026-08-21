@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import CreateNewBlogForm from './CreateNewBlogForm'
 import Blog from './Blog'
 
-const Home = ({ user, blogs, addNewBlog, handleLike, handleRemoveBlog, handleBlogVisit }) => {
+const Home = ({ user, blogs, handleLike, handleRemoveBlog, handleBlogVisit }) => {
     const [visibilityList, setVisibilityList] = useState([])
     const allBlogsVisible = visibilityList.length > 0 && visibilityList.every(obj => obj.visibility)
 
@@ -49,7 +49,6 @@ const Home = ({ user, blogs, addNewBlog, handleLike, handleRemoveBlog, handleBlo
                     {user && <h3>Hi {user.name} ({user.username}), you are logged in!</h3>}
                 </div>
                 <div className='top-buttons'>
-                    <CreateNewBlogForm addBlog={addNewBlog} />
                     <button onClick={allBlogsVisible ? handleHideAllBlogs : handleViewAllBlogs}>{allBlogsVisible ? 'Hide All Blogs' : 'View All Blogs'}</button>
                 </div>
                 <div className='blog-parent'>
