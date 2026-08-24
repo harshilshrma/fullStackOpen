@@ -47,9 +47,11 @@ const Home = ({ user, blogs, handleLike, handleRemoveBlog, handleBlogVisit }) =>
                 <div className='user-login'>
                     {user && <h3>Hi {user.name} ({user.username}), you are logged in!</h3>}
                 </div>
-                <div className='top-buttons'>
-                    <button onClick={allBlogsVisible ? handleHideAllBlogs : handleViewAllBlogs}>{allBlogsVisible ? 'Hide All Blogs' : 'View All Blogs'}</button>
-                </div>
+                {blogs.length > 0 &&
+                    <div className='top-buttons'>
+                        <button onClick={allBlogsVisible ? handleHideAllBlogs : handleViewAllBlogs}>{allBlogsVisible ? 'Hide All Blogs' : 'View All Blogs'}</button>
+                    </div>
+                }
                 <div className='blog-parent'>
                     {blogs.map(blog => {
                         const isBlogVisible = visibilityList.find(visi => visi.id === blog.id)?.visibility ?? false

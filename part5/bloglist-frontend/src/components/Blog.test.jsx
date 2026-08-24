@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Blog from './Blog'
@@ -7,6 +8,23 @@ const testBlog = {
   author: 'test user',
   url: 'www.test.com',
   likes: 20
+}
+
+const testUser = {
+  name: 'Test User',
+  username: 'testuser'
+}
+
+const TestBlogComponent = ({ likeMockHandler }) => {
+  const [isVisible, setIsVisible] = useState(false)
+
+  const toggleVisibility = () => {
+    setIsVisible(prev => !prev)
+  }
+
+  return (
+    <Blog blog={testBlog} toggleVisibility={toggleVisibility} isVisible={isVisible} handleLike={likeMockHandler} user={testUser}/>
+  )
 }
 
 test('Blog component renders title and author by default but not URL & likes', () => {
@@ -19,11 +37,13 @@ test('Blog component renders title and author by default but not URL & likes', (
 })
 
 test('Blog component renders URL & likes when the button controlling the shown details has been clicked', async () => {
-  render(<Blog blog={testBlog} />)
+  const user = userEvent.setup()
+  const mockHandler = vi.fn()
+  render(<TestBlogComponent likeMockHandler={mockHandler} />)
+
   expect(screen.queryByText('www.test.com')).not.toBeInTheDocument()
   expect(screen.queryByText('Likes: 20')).not.toBeInTheDocument()
 
-  const user = userEvent.setup()
   const button = screen.getByRole('button', { name: 'View' })
   await user.click(button)
 
@@ -32,10 +52,10 @@ test('Blog component renders URL & likes when the button controlling the shown d
 })
 
 test('Clicking the like button twice calls the event handler of the component twice', async () => {
-  const mockHandler = vi.fn()
-  render(<Blog blog={testBlog} handleLike={mockHandler}/>)
-
   const user = userEvent.setup()
+  const mockHandler = vi.fn()
+  render(<TestBlogComponent likeMockHandler={mockHandler} />)
+
   const viewButton = screen.getByRole('button', { name: 'View' })
   await user.click(viewButton)
 
