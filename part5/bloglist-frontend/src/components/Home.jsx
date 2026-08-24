@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import CreateNewBlogForm from './CreateNewBlogForm'
 import Blog from './Blog'
 
 const Home = ({ user, blogs, handleLike, handleRemoveBlog, handleBlogVisit }) => {
