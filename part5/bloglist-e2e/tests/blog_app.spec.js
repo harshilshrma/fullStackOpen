@@ -12,7 +12,7 @@ describe('Blog App', () => {
             }
         })
 
-        await page.goto('http://localhost:5173/')
+        await page.goto('http://localhost:5173/login')
     })
 
     test('Login form is shown', async ({ page }) => {
@@ -45,8 +45,10 @@ describe('Blog App', () => {
             await createBlog(page, 'test blog title', 'test user', 'www.test.com', '43')
 
             await expect(page.getByText('test blog title – test user')).toBeVisible()
-            await expect(page.getByRole('button', { name: 'View' })).toBeVisible()
-            await page.getByRole('button', { name: 'View' }).click()
+            await expect(page.getByRole('button', { name: 'View', exact: true })).toBeVisible()
+            await page
+                .locator('.blog-title')
+                .getByRole('button', { name: 'View' }).click()
             await expect(page.getByText('www.test.com')).toBeVisible()
             await expect(page.getByText('Likes: 43')).toBeVisible()
             await expect(page.getByRole('button', { name: 'like' })).toBeVisible()
@@ -55,7 +57,7 @@ describe('Blog App', () => {
         test('a blog can be liked', async ({ page }) => {
             await createBlog(page, 'test blog title', 'test user', 'www.test.com', '43')
 
-            await page.getByRole('button', { name: 'View' }).click()
+            await page.getByRole('button', { name: 'View', exact: true }).click()
             await page.getByRole('button', { name: 'like' }).click()
             await expect(page.getByText('Likes: 44')).toBeVisible()
         })
@@ -66,7 +68,7 @@ describe('Blog App', () => {
             })
 
             await createBlog(page, 'test blog title', 'test user', 'www.test.com', '43')
-            await page.getByRole('button', { name: 'View' }).click()
+            await page.getByRole('button', { name: 'View', exact: true }).click()
             await page.getByRole('button', { name: 'Remove' }).click()
 
             await expect(page.getByText('test blog title – test user')).not.toBeVisible()
@@ -75,11 +77,12 @@ describe('Blog App', () => {
 
         test('only the user who added the blog sees the blog\'s delete button', async ({ page, request }) => {
             await createBlog(page, 'test blog title', 'test user', 'www.test.com', '43')
-            await page.getByRole('button', { name: 'View' }).click()
+            await page.getByRole('button', { name: 'View', exact: true }).click()
             await expect(page.getByRole('button', { name: 'Remove' })).toBeVisible()
 
             // login other user
             await page.getByRole('button', { name: 'Logout' }).click()
+            await page.goto('http://localhost:5173/login')
             await request.post(
                 'http://localhost:3001/api/users', {
                 data: {
@@ -92,7 +95,7 @@ describe('Blog App', () => {
             await loginWith(page, 'hs33', 'max')
             await expect(page.getByText('test blog title – test user')).toBeVisible()
 
-            await page.getByRole('button', { name: 'View' }).click()
+            await page.getByRole('button', { name: 'View', exact: true }).click()
             await expect(page.getByRole('button', { name: 'Remove' })).not.toBeVisible()
         })
 
@@ -111,7 +114,7 @@ describe('Blog App', () => {
             const blogB = page.locator('.blog-container').filter({ hasText: 'Blog B – test user B' })
             await blogB.getByRole('button', { name: 'View' }).click()
 
-            for (let i = 0; i < 3; i++) { 
+            for (let i = 0; i < 3; i++) {
                 const currentLikes = 28 + i
                 await blogB.getByRole('button', { name: 'like' }).click()
                 await expect(blogB).toContainText(`Likes: ${currentLikes + 1}`)
