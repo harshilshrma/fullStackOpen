@@ -42,9 +42,9 @@ const TestSingleBlog = ({ isAuthenticated, isCreator }) => {
 test('Blog information and the number of likes are displayed to unauthenticated users, buttons are not displayed', () => {
     render(<TestSingleBlog isAuthenticated={false} />)
 
-    expect(screen.getByText('test blog – test user')).toBeVisible()
+    expect(screen.getByText('test blog')).toBeVisible()
     expect(screen.getByText('www.test.com')).toBeVisible()
-    expect(screen.getByText('Likes: 20')).toBeVisible()
+    expect(screen.getByText('20 likes')).toBeVisible()
 
     expect(screen.queryByRole('button', { name: 'like' })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Remove' })).not.toBeInTheDocument()
