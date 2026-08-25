@@ -18,10 +18,10 @@ test('The CreateNewBlog form calls addBlog with the right details when a new blo
         </MemoryRouter>
     )
 
-    const titleInput = screen.getByLabelText('Title*:')
-    const authorInput = screen.getByLabelText('Author:')
-    const urlInput = screen.getByLabelText('URL*:')
-    const likesInput = screen.getByLabelText('Likes:')
+    const titleInput = screen.getByLabelText('Title*')
+    const authorInput = screen.getByLabelText('Author')
+    const urlInput = screen.getByLabelText('URL*')
+    const likesInput = screen.getByLabelText('Likes')
     const createButton = screen.getByRole('button', { name: 'Create' })
 
     await user.type(titleInput, 'test title')

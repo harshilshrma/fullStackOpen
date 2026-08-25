@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { TextField, Button } from '@mui/material'
 
 const CreateNewBlogForm = ({ user, addBlog }) => {
   const [title, setTitle] = useState('')
@@ -28,43 +29,45 @@ const CreateNewBlogForm = ({ user, addBlog }) => {
 
   return (
     <div>
-        <form onSubmit={handleSubmit} className='create-new-blog'>
-          <h2>Create New Blog</h2>
-          <label>
-            Title*:
-            <input
-              type="text"
-              value={title}
-              onChange={({ target }) => setTitle(target.value)}
-            />
-          </label>
-          <label>
-            Author:
-            <input
-              type="text"
-              value={author}
-              onChange={({ target }) => setAuthor(target.value)}
-            />
-          </label>
-          <label>
-            URL*:
-            <input
-              type="text"
-              value={url}
-              onChange={({ target }) => setUrl(target.value)}
-            />
-          </label>
-          <label>
-            Likes:
-            <input
-              type="number"
-              value={likes}
-              onChange={({ target }) => setLikes(target.value)}
-            />
-          </label>
-          <button type="submit">Create</button>
-        </form>
-        <button onClick={() => navigate('/')}>Cancel</button>
+      <form onSubmit={handleSubmit} className='create-new-blog'>
+        <h2>Create New Blog</h2>
+        <TextField
+          label="Title*"
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+          variant='outlined'
+          size='small'
+          type="text"
+        />
+        <TextField
+          label="Author"
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+          variant='outlined'
+          size='small'
+          type="text"
+        />
+        <TextField
+          label="URL*"
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+          variant='outlined'
+          size='small'
+          type="text"
+        />
+        <TextField
+          label="Likes"
+          value={likes}
+          onChange={({ target }) => setLikes(target.value)}
+          variant='outlined'
+          size='small'
+          type="number"
+        />
+        <div className='create-form-buttons'>
+          <Button color='primary' variant='contained' type="submit">Create</Button>
+          <Button color='warning' variant='contained' onClick={() => navigate('/')}>Cancel</Button>
+        </div>
+      </form>
     </div>
   )
 }

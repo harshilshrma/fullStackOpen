@@ -23,7 +23,7 @@ const App = () => {
     setTimeout(() => {
       setIsError(false)
       setNotification('')
-    }, 5000)
+    }, 3000)
   }
 
   useEffect(() => {
