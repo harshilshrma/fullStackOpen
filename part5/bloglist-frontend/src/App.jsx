@@ -11,18 +11,20 @@ import {
   useNavigate
 } from 'react-router-dom'
 import CreateNewBlogForm from './components/CreateNewBlogForm'
+import Notification from './components/Notification'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import Button from '@mui/material/Button'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState('')
-  const [isError, setIsError] = useState(false)
+  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
   const navigate = useNavigate()
 
   const clearNotification = () => {
     setTimeout(() => {
-      setIsError(false)
-      setNotification('')
+      setNotification(null)
     }, 3000)
   }
 
@@ -47,12 +49,11 @@ const App = () => {
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
       )
-      setNotification('')
+      setNotification(null)
       navigate('/')
       return true
     } catch (error) {
-      setIsError(true)
-      setNotification(error.response.data.error)
+      setNotification({ text: error.response.data.error, type: 'error' })
       clearNotification()
       return false
     }
@@ -62,8 +63,7 @@ const App = () => {
     event.preventDefault()
     window.localStorage.removeItem('loggedUser')
     setUser(null)
-    setNotification('')
-    setIsError(false)
+    setNotification(null)
     navigate('/')
   }
 
@@ -80,8 +80,7 @@ const App = () => {
       newBlogsArray.sort((a, b) => b.likes - a.likes)
       setBlogs(newBlogsArray)
     } catch (error) {
-      setIsError(true)
-      setNotification(error.response.data.error)
+      setNotification({ text: error.response.data.error, type: 'error' })
       clearNotification()
     }
   }
@@ -92,13 +91,11 @@ const App = () => {
       setBlogs(
         blogs.filter(b => b.id !== blog.id)
       )
-      setIsError(false)
       navigate('/')
-      setNotification(`Blog "${blog.title}" by ${blog.author} was removed!`)
+      setNotification({ text: `Blog "${blog.title}" by ${blog.author} was removed!`, type: 'info' })
       clearNotification()
     } catch (error) {
-      setIsError(true)
-      setNotification(error.response.data.error)
+      setNotification({ text: error.response.data.error, type: 'error' })
       clearNotification()
     }
   }
@@ -111,14 +108,12 @@ const App = () => {
       newBlogsArray.sort((a, b) => b.likes - a.likes)
       setBlogs(newBlogsArray)
 
-      setNotification(`A new blog "${title}" by ${author} has been added!`)
+      setNotification({ text: `A new blog "${title}" by ${author} has been added!`, type: 'success' })
       navigate('/')
-      setIsError(false)
       clearNotification()
       return true
     } catch (error) {
-      setNotification(error.response.data.error)
-      setIsError(true)
+      setNotification({ text: error.response.data.error, type: 'error' })
       clearNotification()
       return false
     }
@@ -128,18 +123,23 @@ const App = () => {
     navigate(`/blogs/${id}`)
   }
 
+  const style = { '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' } }
+
   return (
     <div>
       <div>
-        <div className='navbar'>
-          <Link to="/">Blogs</Link>
-          {user && <Link to="/create">Add a new blog</Link>}
-          {user ? <button onClick={handleLogout}>Logout</button> : <Link to="/login">Login</Link>}
-        </div>
+        <AppBar position='static'>
+          <Toolbar>
+            <Button component={Link} color='inherit' to="/" sx={style}>Blogs</Button>
+            {user && <Button component={Link} color='inherit' to="/create" sx={style}>Add a new blog</Button>}
+            {user
+              ? <Button component={Link} color='error' onClick={handleLogout} sx={style}>Logout</Button>
+              : <Button component={Link} color='secondary' to="/login" sx={style}>Login</Button>
+            }
+          </Toolbar>
+        </AppBar>
 
-        {notification &&
-          <div className={`notification-dialog ${isError ? 'error-dialog' : ''}`}>{notification}</div>
-        }
+        <Notification notification={notification} />
 
         <Routes>
           <Route path="/" element={
@@ -155,10 +155,10 @@ const App = () => {
             <Login user={user} handleLogin={handleLogin} />
           } />
           <Route path="/blogs/:id" element={
-            <SingleBlog blogs={blogs} user={user} handleLike={handleLike} handleRemoveBlog={handleRemoveBlog}/>
+            <SingleBlog blogs={blogs} user={user} handleLike={handleLike} handleRemoveBlog={handleRemoveBlog} />
           } />
           <Route path="/create" element={
-            <CreateNewBlogForm user={user} addBlog={addNewBlog}/>
+            <CreateNewBlogForm user={user} addBlog={addNewBlog} />
           } />
         </Routes>
       </div>

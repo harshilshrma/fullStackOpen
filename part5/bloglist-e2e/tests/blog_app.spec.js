@@ -81,7 +81,7 @@ describe('Blog App', () => {
             await expect(page.getByRole('button', { name: 'Remove' })).toBeVisible()
 
             // login other user
-            await page.getByRole('button', { name: 'Logout' }).click()
+            await page.getByRole('link', { name: 'Logout' }).click()
             await page.goto('http://localhost:5173/login')
             await request.post(
                 'http://localhost:3001/api/users', {
