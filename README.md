@@ -2,7 +2,7 @@
 
 This repository contains my solutions to the FullstackOpen course exercises. Click on each part name below to explore my code and projects.  
 
-Progress: Completed Part 0, 1, 2, 3, 4 ✅ | Working on Part 5 🔄  
+Progress: Completed Part 0, 1, 2, 3, 4, 5 ✅ | Working on Part 6 🔄  
 
 ---
 
@@ -31,6 +31,9 @@ Progress: Completed Part 0, 1, 2, 3, 4 ✅ | Working on Part 5 🔄
 - [Part 5 - Testing React apps, React Router](./part5/)
   - [Blog List App (Frontend)](./part5/bloglist-frontend/)
   - [Blog List E2E Playwright Tests](./part5/bloglist-e2e/)
+
+- [Part 6 - Advanced state management](./part6/)
+
 ---
 
 ## About Me  
@@ -41,4 +44,4 @@ Progress: Completed Part 0, 1, 2, 3, 4 ✅ | Working on Part 5 🔄
 
 ---
 
-This Course has been an incredible way to strengthen my fullstack skills in React, Node, MongoDB, and more.  
+This Course has been an incredible way to strengthen my fullstack skills in React, Redux, Node.js, MongoDB, GraphQL, TypeScript, REST APIs and more.  
