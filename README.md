@@ -2,7 +2,7 @@
 
 This repository contains my solutions to the FullstackOpen course exercises. Click on each part name below to explore my code and projects.  
 
-Progress: Completed Part 0, 1, 2, 3, 4, 5 ✅ | Working on Part 6 🔄  
+Progress: Completed Part 0, 1, 2, 3, 4, 5, 6 ✅ | Working on Part 7 🔄  
 
 ---
 
@@ -32,7 +32,9 @@ Progress: Completed Part 0, 1, 2, 3, 4, 5 ✅ | Working on Part 6 🔄
   - [Blog List App (Frontend)](./part5/bloglist-frontend/)
   - [Blog List E2E Playwright Tests](./part5/bloglist-e2e/)
 
-- [Part 6 - Advanced state management](./part6/)
+- [Part 6 - Advanced state management (in a different repo)](https://github.com/harshilshrma/fullStackOpen-part6)
+
+- [Part 7 - Custom hooks, esbuild](./part7)
 
 ---
 
